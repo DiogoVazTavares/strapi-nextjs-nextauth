@@ -11,23 +11,8 @@ const options = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET
     }),
-    // Providers.Email({
-    //   server: {
-    //     host: process.env.NEXTAUTH_EMAIL_SERVER_HOST,
-    //     port: process.env.NEXTAUTH_EMAIL_SERVER_PORT,
-    //     auth: {
-    //       user: process.env.NEXTAUTH_MAIL_SERVER_USER,
-    //       pass: process.env.NEXTAUTH_EMAIL_SERVER_PASSWORD
-    //     }
-    //   },
-    //   from: process.env.NEXTAUTH_EMAIL_FROM
-    // }),
     Providers.Credentials({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
       name: 'Credentials',
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
       credentials: {
         email: { label: "E-mail ou username", type: "text" },
         password: { label: "Password", type: "password" }
@@ -72,9 +57,15 @@ const options = {
   },
   session: {
     jwt: true,
-    // encryption: true,
   },
-  debug: true,
+  //https://next-auth.js.org/warnings#jwt_auto_generated_signing_key
+  //https://github.com/nextauthjs/next-auth/issues/484#issuecomment-709357223
+  jwt: {
+    secret: process.env.NEXTAUTH_JWTSECRET,
+    encryption: true,
+    signingKey: process.env.NEXTAUTH_SIGNINGKEY,
+    encryptionKey: process.env.NEXTAUTH_ENCRYPTIONKEY,
+  },
   callbacks: {
 
     // https://next-auth.js.org/configuration/callbacks#jwt-callback
